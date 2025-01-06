@@ -1,1 +1,4 @@
 # Fractional_Derivatives_Fractal_Activation_Functions
+
+run_nn_fractals_alldatasets.py runs all classification experiments
+fractional_predcit_airline_passnegers_4.py runs the autoregressive time series prediction
