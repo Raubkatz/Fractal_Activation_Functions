@@ -16,12 +16,21 @@ The repo answers three questions:
 fractal-activation-playground/
 
 ├── fractal_activation_functions.py # all 12 custom σ(·)
+
 │
+
 ├── 01_run_experiments.py # 🚂 grid-search: 10 data sets × 5 optims × 12 activations
+
 ├── 02_evaluate_results.py # 📊 merge JSON logs → mean / std / min / max tables
+
 ├── 03_expressivity_experiment_enhanced.py
+
 │ # 🔍 replicates Poole-16 / Raghu-17 trajectory analysis
+
 ├── 04_plot_activation_functions.py # 🎨 pretty plots of every activation on [-2,2]
+
 │
+
 ├── requirements.txt # “pip install -r …” yields TF + SciPy stack
+
 └── README.md # you are here
