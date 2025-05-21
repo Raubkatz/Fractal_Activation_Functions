@@ -57,7 +57,7 @@ scikit-learn==1.3.2     # metrics, preprocessing, model_selection
 
 tensorflow==2.10.0      # all models + fractal activations
 
-## ── visualisation ───────────────────────────────────────────
+### ── visualisation ───────────────────────────────────────────
 
 matplotlib==3.7.5       # loss curves, expressivity plots, activation curves
 
