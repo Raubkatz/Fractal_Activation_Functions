@@ -23,9 +23,7 @@ fractal-activation-playground/
 
 ├── 02_evaluate_results.py # 📊 merge JSON logs → mean / std / min / max tables
 
-├── 03_expressivity_experiment_enhanced.py
-
-│ # 🔍 replicates Poole-16 / Raghu-17 trajectory analysis
+├── 03_expressivity_experiment_enhanced.py # 🔍 replicates Poole-16 / Raghu-17 trajectory analysis
 
 ├── 04_plot_activation_functions.py # 🎨 pretty plots of every activation on [-2,2]
 
