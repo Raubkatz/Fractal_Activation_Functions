@@ -17,8 +17,6 @@ fractal-activation-playground/
 
 ├── fractal_activation_functions.py # all 12 custom σ(·)
 
-│
-
 ├── 01_run_experiments.py # 🚂 grid-search: 10 data sets × 5 optims × 12 activations
 
 ├── 02_evaluate_results.py # 📊 merge JSON logs → mean / std / min / max tables
