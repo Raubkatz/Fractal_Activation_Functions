@@ -29,10 +29,6 @@ fractal-activation-playground/
 
 ├── 04_plot_activation_functions.py # 🎨 pretty plots of every activation on [-2,2]
 
-│
-
-├── requirements.txt # “pip install -r …” yields TF + SciPy stack
-
 └── README.md # you are here
 
 ## Requirements
