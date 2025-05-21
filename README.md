@@ -37,21 +37,21 @@ fractal-activation-playground/
 
 ## Requirements
 
-# ── core language ────────────────────────────────────────────
+## ── core language ────────────────────────────────────────────
 python==3.8.19          # same interpreter version used in the conda env
 
-# ── numerical stack ─────────────────────────────────────────
+## ── numerical stack ─────────────────────────────────────────
 numpy==1.23.5           # base ndarray operations everywhere
 scipy==1.10.1           # required by scikit-learn, not imported directly
 
-# ── data wrangling / ML utilities ───────────────────────────
+## ── data wrangling / ML utilities ───────────────────────────
 pandas==2.0.3           # result aggregation in 02_evaluate_results.py
 scikit-learn==1.3.2     # metrics, preprocessing, model_selection
 
-# ── deep-learning backend ───────────────────────────────────
+## ── deep-learning backend ───────────────────────────────────
 tensorflow==2.10.0      # all models + fractal activations
 
-# ── visualisation ───────────────────────────────────────────
+## ── visualisation ───────────────────────────────────────────
 matplotlib==3.7.5       # loss curves, expressivity plots, activation curves
 seaborn==0.13.2         # prettier styling for expressivity & activation figures
 
