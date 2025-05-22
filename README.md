@@ -9,7 +9,7 @@ This repository dsicusses the following:
 
 ---
 
-## 💾 Repository layout
+## Repository layout
 
 fractal-activation-playground/
 
