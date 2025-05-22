@@ -13,7 +13,7 @@ This repository dsicusses the following:
 
 fractal-activation-playground/
 
-├── fractal_activation_functions.py # all 12 custom σ(·)
+├── fractal_activation_functions.py # all eveloped fractal activaiton fucntions
 
 ├── 01_run_experiments.py # 10 data sets × 5 optims × 12 activations
 
