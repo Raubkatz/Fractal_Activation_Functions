@@ -1,6 +1,5 @@
 # 🧩 Fractal-Activation Playground
-A fully-reproducible sandbox accompanying  
-**“Fractals in Neural Networks: Introducing a New Class of Activation Functions.”**
+A fully-reproducible sandbox
 
 The repo answers three questions:
 
