@@ -68,14 +68,14 @@ if __name__ == "__main__":
 
 # Define the neural network
 class SimpleNet(nn.Module):
-    def __init__(self, activation_function: type = nn.ReLU):
+    def __init__(self, activation_function: type = nn.ReLU, size: int = 8):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(1, 8),
+            nn.Linear(1, size),
             activation_function(),
-            nn.Linear(8, 8),
+            nn.Linear(size, size),
             activation_function(),
-            nn.Linear(8, 1)
+            nn.Linear(size, 1)
         )
 
     def forward(self, x):
@@ -84,26 +84,26 @@ class SimpleNet(nn.Module):
 
 TARGET_FUNCTIONS = {
     "linear": lambda x: x,
-    "quadratic": lambda x: x ** 2,
-    "sine": lambda x: torch.sin(2 * np.pi * x),
-    "exp": lambda x: torch.exp(x),
-    "log": lambda x: torch.log(x + 1e-5),  # Avoid log(0)
-    "modulated_blancmange": ModulatedBlancmange(),
-    "modified_weierstrass": ModifiedWeierstrass(),
+    #"quadratic": lambda x: x ** 2,
+    #"sine": lambda x: torch.sin(2 * np.pi * x),
+    #"exp": lambda x: torch.exp(x),
+    #"log": lambda x: torch.log(x + 1e-5),  # Avoid log(0)
+    #"modulated_blancmange": ModulatedBlancmange(),
+    #"modified_weierstrass": ModifiedWeierstrass(),
 }
-
 ACTIVATION_FUNCTIONS = {
-    'ReLU': nn.ReLU,
-    'Tanh': nn.Tanh,
-    'Sigmoid': nn.Sigmoid,
-    'LeakyReLU': nn.LeakyReLU,
-    'ELU': nn.ELU,
-    'SELU': nn.SELU,
-    'GELU': nn.GELU,
-    'Softplus': nn.Softplus,
+    #'ReLU': nn.ReLU,
+    #'Tanh': nn.Tanh,
+    #'Sigmoid': nn.Sigmoid,
+    #'LeakyReLU': nn.LeakyReLU,
+    #'ELU': nn.ELU,
+    #'SELU': nn.SELU,
+    #'GELU': nn.GELU,
+    #'Softplus': nn.Softplus,
     'modulated_blancmange': ModulatedBlancmange,
     'modified_weierstrass': ModifiedWeierstrass,
 }
+NN_SIZES = [2, 4, 16, 32, 64]
 
     
 
@@ -113,55 +113,57 @@ def set_seed(seed):
     np.random.seed(SEED)
 
 def generate_plot():
-    for tf_name, target_funciton in tqdm(TARGET_FUNCTIONS.items()):
-        for af_name, activation_function in ACTIVATION_FUNCTIONS.items():
-            # Set seed for reproducibility
-            set_seed(SEED)
+    for nn_size in NN_SIZES:
+        for tf_name, target_funciton in tqdm(TARGET_FUNCTIONS.items()):
+            for af_name, activation_function in ACTIVATION_FUNCTIONS.items():
+                # Set seed for reproducibility
+                set_seed(SEED)
 
-            # Generate data
-            x = np.linspace(0, 1, 200).reshape(-1, 1)
-            y = target_funciton(torch.tensor(x, dtype=torch.float32)).numpy()
+                # Generate data
+                x = np.linspace(0, 1, 200).reshape(-1, 1)
+                y = target_funciton(torch.tensor(x, dtype=torch.float32)).numpy()
 
-            x_tensor = torch.tensor(x, dtype=torch.float32)
-            y_tensor = torch.tensor(y, dtype=torch.float32)
+                x_tensor = torch.tensor(x, dtype=torch.float32)
+                y_tensor = torch.tensor(y, dtype=torch.float32)
 
-            # Initialize network, loss, optimizer
-            net = SimpleNet(activation_function=activation_function)
-            criterion = nn.MSELoss()
-            optimizer = optim.Adam(net.parameters(), lr=0.01)
-            # For animation: store predictions at intervals
-            predictions = []
+                # Initialize network, loss, optimizer
+                net = SimpleNet(activation_function=activation_function)
+                criterion = nn.MSELoss()
+                optimizer = optim.Adam(net.parameters(), lr=0.01)
+                # For animation: store predictions at intervals
+                predictions = []
 
-            # Train the network
-            EPOCHS = 1000
-            INTERVAL = 10  # Store every 10 EPOCHS
-            for epoch in range(EPOCHS):
-                optimizer.zero_grad()
-                outputs = net(x_tensor)
-                loss = criterion(outputs, y_tensor)
-                loss.backward()
-                optimizer.step()
-                if epoch % INTERVAL == 0 or epoch == EPOCHS - 1:
-                    with torch.no_grad():
-                        pred = net(x_tensor).detach().numpy()
-                        predictions.append(pred)
+                # Train the network
+                EPOCHS = 1000
+                INTERVAL = 10  # Store every 10 EPOCHS
+                for epoch in range(EPOCHS):
+                    optimizer.zero_grad()
+                    outputs = net(x_tensor)
+                    loss = criterion(outputs, y_tensor)
+                    loss.backward()
+                    optimizer.step()
+                    if epoch % INTERVAL == 0 or epoch == EPOCHS - 1:
+                        with torch.no_grad():
+                            pred = net(x_tensor).detach().numpy()
+                            predictions.append(pred)
 
-            # Animation
-            fig, ax = plt.subplots()
-            line_true, = ax.plot(x, y, label=f'{tf_name} function')
-            line_pred, = ax.plot(x, predictions[0], label=f'{af_name} prediction', color='orange')
-            ax.set_ylim(-1.2, 1.2)
-            ax.legend()
+                # Animation
+                fig, ax = plt.subplots()
+                line_true, = ax.plot(x, y, label=f'{tf_name} function')
+                line_pred, = ax.plot(x, predictions[0], label=f'{af_name} prediction', color='orange')
+                ax.set_ylim(-1.2, 1.2)
+                ax.legend()
 
-            def animate(i):
-                line_pred.set_ydata(predictions[i])
-                ax.set_title(f'Epoch {i*INTERVAL}')
-                return line_pred,
+                def animate(i):
+                    line_pred.set_ydata(predictions[i])
+                    ax.set_title(f'Epoch {i*INTERVAL}')
+                    return line_pred,
 
-            ani = FuncAnimation(fig, animate, frames=len(predictions), interval=50, blit=True)
-            ani.save(f'plots/{tf_name}/{af_name}_{tf_name}.gif', writer='pillow', fps=20)
-            print(f"Animation saved as '{af_name}_{tf_name}.gif'")
-            plt.close(fig)
+                ani = FuncAnimation(fig, animate, frames=len(predictions), interval=50, blit=True)
+                name = f'{af_name}_{nn_size}_{tf_name}.gif'
+                ani.save(f'plots/{tf_name}/{name}', writer='pillow', fps=20)
+                print(f"Animation saved as '{name}'")
+                plt.close(fig)
 
 
 if __name__ == "__main__":
