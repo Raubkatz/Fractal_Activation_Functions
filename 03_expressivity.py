@@ -1,10 +1,10 @@
 # =============================================================
-# 🧭 expressivity_experiment_enhanced.py — *annotated edition*
+# expressivity_experiment_enhanced.py — *annotated edition*
 # =============================================================
 #
 # This file is a **comment‑augmented** drop‑in replacement for the
 # original `expressivity_experiment_enhanced.py` that accompanies
-# our paper on fractal activation functions.  ✨  All executable
+# our paper on fractal activation functions.   All executable
 # statements remain **byte‑for‑byte identical** to the baseline so
 # that anyone can reproduce the numerical results reported in the
 # manuscript.  We merely sprinkle additional remarks that explain
@@ -18,7 +18,7 @@
 #
 # Wherever a new block of commentary begins we prefix it with a
 # colourful emoji so the pedagogical layer is easy to skim while
-# leaving the computational layer untouched.  🚦
+# leaving the computational layer untouched.  
 # -------------------------------------------------------------
 # Quantitative study of the expressivity of deep neural network
 # activation functions along unit‑circle trajectories.
@@ -33,7 +33,7 @@
 
 from __future__ import annotations
 
-# 🚀 IMPORTS -----------------------------------------------------------------
+# IMPORTS -----------------------------------------------------------------
 # All libraries exactly as in the original file.  The two plotting
 # helpers below are not strictly necessary for expressivity theory,
 # but they provide human‑readable diagnostics (length curves, PCA
@@ -49,7 +49,7 @@ import numpy as np
 import seaborn as sns
 import tensorflow as tf
 
-# 🖌️ VISUAL STYLE ------------------------------------------------------------
+# VISUAL STYLE ------------------------------------------------------------
 # Tailwind‑inspired greyscale palette supplied by the user.  The
 # colour scheme is cosmetic and does **not** influence any numeric
 # quantity; hence we may annotate freely.
@@ -72,7 +72,7 @@ sns.set_theme(
     },
 )
 
-# ⚙️ HYPER‑PARAMETERS --------------------------------------------------------
+# HYPER‑PARAMETERS --------------------------------------------------------
 # Below we fix the network depth, width, weight variance, etc.  The
 # chosen values replicate the *mean‑field* setting analysed by
 # [Poole‑16] where every hidden layer shares identical statistics.
@@ -116,14 +116,14 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 np.random.seed(0)
 tf.random.set_seed(0)
 
-# 📦 IMPORT FRACTAL ACTIVATIONS ---------------------------------------------
+# IMPORT FRACTAL ACTIVATIONS ---------------------------------------------
 # We dynamically plug in our custom fractal activations.  Keeping
 # these functions external avoids polluting the core experiment and
 # lets us swap them for standard ReLU/tanh exactly as in our paper’s
 # classification section.
 import fractal_activation_functions as fractal  # noqa: E402  pylint: disable=wrong-import-position
 
-# 🗺️ ACTIVATION DICTIONARY ---------------------------------------------------
+# ACTIVATION DICTIONARY ---------------------------------------------------
 # The keys here (strings) are the canonical names used everywhere
 # else in the LaTeX tables, so adding an entry automatically enables
 # its inclusion in the expressivity plots.
@@ -144,7 +144,7 @@ ACTIVATIONS: Dict[str, tf.keras.layers.Layer] = {
     "modified_weierstrass_ReLU": fractal.modified_weierstrass_function_relu,
 }
 
-# 🧰 HELPER FUNCTIONS -------------------------------------------------------
+# HELPER FUNCTIONS -------------------------------------------------------
 # The following utilities are unchanged; we only annotate *why* they
 # are useful through the lens of Poole & Raghu.
 
@@ -189,7 +189,7 @@ def save_plot(fig: plt.Figure, fname: str) -> None:
     fig.savefig(eps_path, format="eps", bbox_inches="tight")
     plt.close(fig)
 
-# 📝 TRAJECTORY LENGTH REGISTRY --------------------------------------------
+# TRAJECTORY LENGTH REGISTRY --------------------------------------------
 # We accumulate per‑layer arc lengths so we can dump a concise table
 # at the end – exactly mirroring Table 1 in [Raghu‑17].
 LENGTHS_PER_ACT: Dict[str, List[float]] = {}
@@ -201,7 +201,7 @@ def report_lengths() -> None:
     for name, lens in LENGTHS_PER_ACT.items():
         print(f"  {name}: {lens}")
 
-# 🏃 MAIN EXPERIMENTAL LOOP -------------------------------------------------
+# MAIN EXPERIMENTAL LOOP -------------------------------------------------
 
 
 def main() -> None:
@@ -211,7 +211,7 @@ def main() -> None:
         print(f"► {act_name}")
 
         # ---------------------- build random weights ----------------------
-        # 🏗️  What happens here?
+        # What happens here?
         # For each hidden layer d = 0 … DEPTH-1 we draw:
         #   •  W_d  ∈ ℝ^{fan_in × WIDTH}      ← fully-connected weight matrix
         #   •  b_d  ∈ ℝ^{WIDTH}               ← bias vector
