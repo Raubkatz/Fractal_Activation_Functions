@@ -1,3 +1,4 @@
+
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -13,9 +14,10 @@ import os
 import time
 from pathlib import Path
 import matplotlib.pyplot as plt
-import FractionalOptimizers as fr
 import fractal_activation_functions as fractal
 import random
+from tensorflow.keras import backend as K
+K.clear_session()
 
 # TensorFlow and CUDA/cuDNN info
 print("TensorFlow version:", tf.__version__)
@@ -132,8 +134,7 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
 
     print(f"Running with seed: {seed_val}")
 
-
-    ns = np.arange(1, 1 + run_nrs, dtype='int')
+    ns = np.arange(seed_val, seed_val + run_nrs, dtype='int')
     activation_name = act[0]
     optimizer_name = op[0]
 
@@ -141,12 +142,6 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
     X, y = dc(load_dataset(data_name))
     n_classes = len(set(y))
     n_features = X.shape[1]
-
-    # Define the model
-    if n_classes == 2:
-        model = binary_model(n_features, n_classes, neurons, act_fn[1])
-    elif n_classes > 2:
-        model = groups_model(n_features, n_classes, neurons, act_fn[1])
 
     data1 = {
         "dataset": data_name,
@@ -184,6 +179,16 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
         data_v = {"vderiv": float(v), "avg accuracy": 0, "avg loss": 0, "avg time": 0, "results": []}
 
         for n in ns:
+            tf.keras.backend.clear_session()
+            # Define the model
+            if n_classes == 2:
+                model = binary_model(n_features, n_classes, neurons, act_fn[1])
+
+            elif n_classes > 2:
+                model = groups_model(n_features, n_classes, neurons, act_fn[1])
+
+            print(f'All seeds: {ns}')
+            print(f'Current Seed: {n}')
             seed(n)
             np.random.seed(n)
             tf.random.set_seed(n)
@@ -211,7 +216,6 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
 
             test_accs.append(test_acc)
             test_losses.append(test_loss)
-
 
             # Get predictions and calculate precision, recall, and F1
             start_time_test = time.time()
@@ -244,6 +248,7 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
             data_v['results'].append(data_run)
             tf.keras.backend.clear_session()
             os.system('pkill -f "tensorboard"')
+            del history, y_pred, X_train, X_test, y_train, y_test, model  # as soon as metrics have been extracted
 
         # Find averages
         avg_acc = np.average(test_accs)
@@ -271,18 +276,12 @@ def train_and_test_(results_dir, data_name, neurons, batch, ep, act, op, run_nrs
         json_data['vderivs'].append(data_v)
         save_json(target_path, json_data)
 
-    return model, X_train, y_train
+    return "Finished"
 
 # Your variables, datasets, and loops are the same as before, so I have omitted them.
 
 # Variables
 optimizers = [
-                ('FSGD', fr.FSGD, 0.01),
-                # ('FSGDP', fr.FSGDP),
-                ('FAdam', fr.FAdam, 0.001),
-                ('FAdagrad', fr.FAdagrad, 1.0),
-                ('FAdadelta', fr.FAdadelta, 1.0),
-                ('FRMSprop', fr.FRMSprop, 0.001),
                 ('sgd', tf.keras.optimizers.SGD, 0.01),
               ('rmsprop', tf.keras.optimizers.RMSprop, 0.001),
               ('adam', tf.keras.optimizers.Adam, 0.001),
@@ -298,36 +297,35 @@ activation_functions = [
     ('weierstrass_mandelbrot_tanhpsin', fractal.weierstrass_mandelbrot_function_tanhpsin),
     ('blancmange', fractal.modulated_blancmange_curve),
     ('decaying_cosine', fractal.decaying_cosine_function_tf),
-    ('modified_weierstrass_decaying', fractal.new_fav_fractal_function),
     ('modified_weierstrass_tanh', fractal.modified_weierstrass_function_tanh),
     ('modified_weierstrass_ReLU', fractal.modified_weierstrass_function_relu),
     ('relu', 'relu'),
     ('sigmoid', 'sigmoid'),
     ('tanh', 'tanh'),]
 
-# Dataset names with their respective neural network parameters
-data_with_params = [  # (data_name, neurons, batch_size, epochs)
-    ("diabetes", 64, 32, 30),  # wokring bad  # diabetes diagnosis records, binary, 9 features, 768 instances
-    ("blood-transfusion-service-center", 32, 8, 30), # marketing model classification, binary, 5 features, 748 instances
-    ("tae", 6, 8, 50),#not working  # teaching assistant evaluation, 3 classes, 6 features, 151 instances #not working fully
-    ("pendigits", 64, 32, 25),#working #10 classes, 64 features, 1797 instances. Simple digit recognition
-    #("Breast-Cancer-Wisconsin-(Prognostic)-Data-Set", 64, 32, 50),# not working #10 classes, 64 features, 1797 instances. Simple digit recognition
-    ("balance-scale", 32, 16, 30),#working: #3 classes, 4 features, 625 instances. Balance scale classification. Your model will probably tip over in favor of failure.
-    ("tic-tac-toe", 64, 32, 25), #working  #Binary, 9 features, 958 instances. Tic-Tac-Toe classification, because clearly, you're playing games instead of getting real work done.
-    ("vertebra-column", 32, 16, 30), #working #Binary, 6 features, 310 instances. Vertebral column classification. I’d say you’ll break its back, but it’s already broken.
-    ("vehicle", 128, 32, 25),#working #4 classes, 18 features, 846 instances. Classify vehicle types. Watch your model turn trucks into bicycles.
-    #("breast-w", 32, 16, 50), #notworking #Binary, 30 features, 569 instances. Breast cancer classification
-    ("climate-model-simulation-crashes", 32, 32, 30),#working  # binary, 21 features, 540 instances
-    #("first-order-theorem-proving", 50, 64, 40),#not working fully
-    # heuristic selection for theorem proving, 6 classes, 52 features, 6118 instances
+# ------------------------------------------------------------------
+#  Dataset  |  n-instances | n-features | n-classes | NN-params
+#           |              |            |  (target) |  (neurons, batch, epochs)
+# ------------------------------------------------------------------
+data_with_params = [
 
-    #("waveform-5000", 32, 128, 50),
-    ]  # 3 classes of waveforms, 41 features, 5000 instances
+    # ---- original block ---------------------------------------------------
+    ("diabetes", 64, 32, 30),  # # diabetes diagnosis records, binary, 9 features, 768 instances
+    ("tic-tac-toe",                       64,  32, 25),   #  958 ×  9 → 2 cls
+    ("vertebra-column",                   32,  16, 30),   #  310 ×  6 → 2 cls
+    ("vehicle",                          128,  32, 25),   #  846 × 18 → 4 cls
+    ("climate-model-simulation-crashes",  32,  32, 30),   #  540 × 21 → 2 cls
+    ("iris",                              32,  16, 30),   #  150 ×  4 → 3 cls
+    ("wine",                              64,  32, 30),   #  178 × 13 → 3 cls
+    ("glass",                             64,  32, 30),   #  214 ×  9 → 6 cls
+    ("ionosphere",                        128,  32, 30),   #  351 × 34 → 2 cls
+    ("seeds",                             64,  32, 30),   #  210 ×  7 → 3 cls
+]
 
-runs = 10
-seed_val = 20 #1 broken, 3 broken, 4 broken, 5 ok
+runs = 40 #
+seed_val = 238974 #201 still needs to be run
 vderivs = np.round(np.arange(0.1, 2.0, 0.1), decimals=1)
-target_dir = f"results_sep25_1run_seedval{seed_val}"
+target_dir = f"results_may12_{runs}runs_seedval{seed_val}_2025_nf2"
 
 #  Loop through datasets, optimizers and vderiv values, repeating each run n times
 for data in data_with_params:
