@@ -29,8 +29,6 @@ fractal-activation-playground/
 
 ## Requirements
 
-### ── core language ────────────────────────────────────────────
-
 python==3.8.19          
 
 numpy==1.23.5           
