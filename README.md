@@ -1,7 +1,6 @@
 # 🧩 Fractal-Activation Playground
-A fully-reproducible sandbox
 
-The repo answers three questions:
+This repository dsicusses the following:
 
 1. **Do fractal activations help on real tabular benchmarks?** → `01_run_experiments.py`  
 2. **How stable / accurate are they across different random splits?** → `02_evaluate_results.py`  
