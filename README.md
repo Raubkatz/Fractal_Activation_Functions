@@ -86,8 +86,7 @@ This repository explores the use of **fractal activation functions** in shallow 
 │
 
 └── README.md
-
-# You are here
+You are here
 
 ## Requirements
 
