@@ -307,7 +307,7 @@ def main() -> None:
             _s, _u, v = tf.linalg.svd(Hc, full_matrices=False)
             coords = tf.tensordot(Hc, v[:, :2], axes=1)
             sns.lineplot(x=coords[:, 0], y=coords[:, 1], ax=ax)
-            ax.set_title(f"L{idx}")
+            ax.set_title(f"L{idx}", fontsize=28)
             ax.set_xticks([])
             ax.set_yticks([])
             ax.set_aspect("equal", "box")
