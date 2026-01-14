@@ -26,36 +26,67 @@ This repository explores the use of **fractal activation functions** in shallow 
 ## Repository layout
 
 ├── fractal_activation_functions.py
+
 │ # Implementation of all developed fractal activation functions
+
 │
+
 ├── 01_run_experiments.py
+
 │ # Main experiment runner: 10 datasets × 5 optimizers × multiple activations
+
 │
+
 ├── 02_evaluate_results.py
+
 │ # Aggregates JSON logs into mean / std / min / max performance tables
+
 │
+
 ├── 02_eval_accuracies_across_Runs.py
+
 │ # Additional aggregation and comparison of accuracies across random runs
+
 │
+
 ├── 03_expressivity_experiment_enhanced.py
+
 │ # Trajectory-length analysis following Poole (2016) and Raghu (2017)
+
 │
+
 ├── 03_expressivity.py
+
 │ # Simplified / focused expressivity experiments and visualizations
+
 │
+
 ├── 04_plot_activation_functions.py
+
 │ # Plots all activation functions on a fixed input interval (e.g. [-2, 2])
+
 │
+
 ├── 04_plot_activations.py
+
 │ # Publication-ready activation plots with consistent styling
+
 │
+
 ├── 05_analyze_time.py
+
 │ # Runtime analysis: training time, prediction time, and aggregate statistics
+
 │
+
 ├── 06_grad_analysis.py
+
 │ # Per-epoch gradient statistics and stability analysis on a fixed probe batch
+
 │
+
 └── README.md
+
 # You are here
 
 ## Requirements
