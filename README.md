@@ -1,6 +1,5 @@
 # 🧩 Fractal-Activation Playground
 
-There is a preprint to be found at https://www.preprints.org/manuscript/202508.0478
 
 This repository explores the use of **fractal activation functions** in shallow feed-forward neural networks, with a focus on tabular classification tasks. In particular, it addresses the following questions:
 
