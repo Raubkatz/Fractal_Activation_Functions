@@ -16,9 +16,6 @@
 #   • how the same infrastructure is reused to benchmark our new
 #     fractal activations.
 #
-# Wherever a new block of commentary begins we prefix it with a
-# colourful emoji so the pedagogical layer is easy to skim while
-# leaving the computational layer untouched.  
 # -------------------------------------------------------------
 # Quantitative study of the expressivity of deep neural network
 # activation functions along unit‑circle trajectories.
