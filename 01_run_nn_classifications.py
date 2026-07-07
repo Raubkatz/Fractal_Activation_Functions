@@ -405,21 +405,21 @@ data_with_params = [
 
     # ---- original block ---------------------------------------------------
     ("diabetes", 64, 32, 30),  # # diabetes diagnosis records, binary, 9 features, 768 instances
-    #("tic-tac-toe",                       64,  32, 25),   #  958 ×  9 → 2 cls
-    #("vertebra-column",                   32,  16, 30),   #  310 ×  6 → 2 cls
-    #("vehicle",                          128,  32, 25),   #  846 × 18 → 4 cls
+    ("tic-tac-toe",                       64,  32, 25),   #  958 ×  9 → 2 cls
+    ("vertebra-column",                   32,  16, 30),   #  310 ×  6 → 2 cls
+    ("vehicle",                          128,  32, 25),   #  846 × 18 → 4 cls
     ("climate-model-simulation-crashes",  32,  32, 30),   #  540 × 21 → 2 cls
-    #("iris",                              32,  16, 30),   #  150 ×  4 → 3 cls
+    ("iris",                              32,  16, 30),   #  150 ×  4 → 3 cls
     ("wine",                              64,  32, 30),   #  178 × 13 → 3 cls
     ("glass",                             64,  32, 30),   #  214 ×  9 → 6 cls
-    #("ionosphere",                        128,  32, 30),   #  351 × 34 → 2 cls
+    ("ionosphere",                        128,  32, 30),   #  351 × 34 → 2 cls
     ("seeds",                             64,  32, 30),   #  210 ×  7 → 3 cls
 ]
 
 runs = 40 #
 seed_val = 238974 #201 still needs to be run
 vderivs = np.round(np.arange(0.1, 2.0, 0.1), decimals=1)
-target_dir = f"results_jan11_{runs}runs_seedval{seed_val}"
+target_dir = f"results_may12_{runs}runs_seedval{seed_val}_2025_nf2"
 
 #  Loop through datasets, optimizers and vderiv values, repeating each run n times
 for data in data_with_params:
